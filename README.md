@@ -25,6 +25,8 @@ https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/
 | `dokumente/Wasserzaehlerstand_WG_Rabenschwand.pdf` | Brief an die Mitglieder (ausfüllbar, mit neuem QR-Code) |
 | `dokumente/Wasserzaehlerstand_WG_Rabenschwand_alt.pdf` | Ursprünglicher Brief (QR-Code zeigt noch auf bplaced) |
 | `tools/make_pdf.py` | Setzt den QR-Code ins Brief-PDF und macht das Rückgabedatum ausfüllbar |
+| `assets/qr_whatsapp.png` | Bild zum Teilen per WhatsApp (QR-Code, Überschrift und Link) |
+| `tools/make_share_image.py` | Erzeugt das WhatsApp-Bild neu |
 | `tools/make_qr.py` | Erzeugt die QR-Codes neu (z. B. für eine andere Adresse) |
 
 ## Einmalige Einrichtung
