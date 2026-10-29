@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>WG Rabenschwand – Mitgliederdaten aktualisieren</title>
+  <title>WG Rabenschwand – Mitgliederdaten &amp; Zählerstand</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body{font-family:Arial, sans-serif; max-width:640px; margin:0 auto; padding:24px; background:#fff;}
@@ -16,21 +16,23 @@
     .consent input{width:auto; margin-top:3px;}
     .consent label{font-weight:normal; margin-top:0;}
     .hp{position:absolute; left:-9999px;}
+    h2{color:#003366; font-size:1.2rem; margin-top:28px; border-top:1px solid #ddd; padding-top:16px;}
+    .hilfe{font-size:.85rem; color:#555; margin-top:4px;}
     .fehler{margin-top:16px; padding:12px; border:1px solid #c62828; background:#fdecea; border-radius:4px;}
     .mailbtn{display:block; text-align:center; padding:10px; background:#003366; color:#fff; text-decoration:none; margin-top:8px;}
   </style>
 </head>
 <body>
-  <h1>Kontakt- &amp; Mitgliederdaten aktualisieren</h1>
+  <h1>Mitgliederdaten &amp; Wasserzählerstand</h1>
   <!-- Versand per Web3Forms (web3forms.com) – funktioniert ohne PHP, z. B. auf GitHub Pages -->
   <form id="formular" action="https://api.web3forms.com/submit" method="post" accept-charset="UTF-8">
     <!-- Zugangsschlüssel von web3forms.com (wird per Mail an wg-rabenschwand@gmx.at geschickt) -->
     <input type="hidden" name="access_key" value="58614e26-85a6-40f0-8aca-abd7e155b9b9">
-    <input type="hidden" name="subject" value="WG Rabenschwand – Aktualisierte Mitgliederdaten">
+    <input type="hidden" name="subject" value="WG Rabenschwand – Mitgliederdaten &amp; Zählerstand">
     <input type="hidden" name="from_name" value="WG Rabenschwand Mitgliederformular">
     <input type="hidden" name="redirect" id="redirect">
     <!-- Erscheint als erste Zeile in der Mail an die WG (Feldname = Bezeichnung in der Mail) -->
-    <input type="hidden" name="Hinweis" value="Neue Mitgliederdaten über das Online-Formular – bitte in die Mitgliederliste übernehmen.">
+    <input type="hidden" name="Hinweis" value="Neue Mitgliederdaten und Zählerstand über das Online-Formular – bitte in die Mitgliederliste übernehmen.">
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" autocomplete="name" required>
 
@@ -49,6 +51,21 @@
       <option value="E-Mail">E-Mail</option>
       <option value="Beides">Beides</option>
     </select>
+
+    <h2>Wasserzähler</h2>
+
+    <label for="zaehlerstand">Aktueller Zählerstand (m³):</label>
+    <input type="text" id="zaehlerstand" name="Zählerstand (m³)" inputmode="decimal"
+           pattern="[0-9]+([,.][0-9]+)?" title="Nur Ziffern, ggf. mit Komma, z. B. 1234,5" placeholder="z. B. 1234,5">
+    <p class="hilfe">Bitte die schwarzen Ziffern am Zähler ablesen (ganze Kubikmeter, die roten Stellen sind optional).</p>
+
+    <label for="ablesedatum">Ablesedatum:</label>
+    <input type="date" id="ablesedatum">
+    <!-- wird beim Absenden im Format TT.MM.JJJJ befüllt -->
+    <input type="hidden" id="ablesedatumText" name="Ablesedatum">
+
+    <label for="zaehlernummer">Zählernummer (falls bekannt):</label>
+    <input type="text" id="zaehlernummer" name="Zählernummer">
 
     <div class="consent">
       <input type="checkbox" id="notfall" name="Notfall-Freigabe" value="Ja" required>
@@ -74,9 +91,16 @@
     var danke = new URL("danke.html", location.href).href;
     document.getElementById("redirect").value = danke;
 
+    // Ablesedatum mit dem heutigen Datum vorbelegen
+    var heute = new Date();
+    document.getElementById("ablesedatum").value = heute.getFullYear() + "-" +
+      String(heute.getMonth() + 1).padStart(2, "0") + "-" + String(heute.getDate()).padStart(2, "0");
+
     // Absenden im Hintergrund; schlägt das fehl, wird der Versand per E-Mail angeboten
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      var d = document.getElementById("ablesedatum").value.split("-");
+      document.getElementById("ablesedatumText").value = d.length === 3 ? d[2] + "." + d[1] + "." + d[0] : "";
       var button = document.getElementById("senden");
       button.disabled = true;
       button.textContent = "Wird gesendet …";
@@ -92,9 +116,11 @@
           var text = "Name: " + wert("name") + "\nAdresse: " + wert("adresse") +
             "\nTelefonnummer: " + wert("telefon") + "\nE-Mail: " + wert("email") +
             "\nBevorzugter Kontaktweg: " + wert("kontakt") +
+            "\nZählerstand (m³): " + wert("zaehlerstand") + "\nAblesedatum: " + wert("ablesedatumText") +
+            "\nZählernummer: " + wert("zaehlernummer") +
             "\nNotfall-Freigabe: " + (document.getElementById("notfall").checked ? "Ja" : "Nein");
           document.getElementById("mailLink").href = "mailto:wg-rabenschwand@gmx.at?subject=" +
-            encodeURIComponent("WG Rabenschwand – Aktualisierte Mitgliederdaten") + "&body=" + encodeURIComponent(text);
+            encodeURIComponent("WG Rabenschwand – Mitgliederdaten & Zählerstand") + "&body=" + encodeURIComponent(text);
           document.getElementById("fehler").hidden = false;
           button.disabled = false;
           button.textContent = "Erneut versuchen";

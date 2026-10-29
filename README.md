@@ -1,7 +1,8 @@
 # WG Rabenschwand – Mitglieder-Formular mit QR-Code
 
-Mitglieder scannen den QR-Code, landen auf dem Online-Formular und die Daten
-werden per E-Mail an `wg-rabenschwand@gmx.at` geschickt.
+Mitglieder scannen den QR-Code, landen auf dem Online-Formular, tragen ihre Daten
+und den aktuellen Wasserzählerstand ein. Alles wird per E-Mail an
+`wg-rabenschwand@gmx.at` geschickt.
 
 Das Formular wird kostenlos über **GitHub Pages** veröffentlicht (kein bplaced,
 kein PHP nötig). Den Mailversand übernimmt der kostenlose Dienst **Web3Forms** (bis 250 Einträge/Monat).
