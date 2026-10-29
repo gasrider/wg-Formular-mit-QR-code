@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>WG Rabenschwand – Mitgliederdaten aktualisieren</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family:Arial, sans-serif; max-width:640px; margin:0 auto; padding:24px; background:#fff;}
+    h1{color:#003366; font-size:1.6rem;}
+    label{display:block; margin-top:10px; font-weight:600;}
+    input,button,select{width:100%; padding:10px; margin-top:6px; font-size:1rem; box-sizing:border-box;}
+    button{background:#4169e1; color:#fff; border:none; cursor:pointer; margin-top:16px;}
+    button:hover{background:#274fc1;}
+    .note{font-size:.85rem; color:#555; margin-top:12px;}
+    .consent{display:flex; align-items:flex-start; gap:8px; margin-top:10px;}
+    .consent input{width:auto; margin-top:3px;}
+    .consent label{font-weight:normal; margin-top:0;}
+    .hp{position:absolute; left:-9999px;}
+  </style>
+</head>
+<body>
+  <h1>Kontakt- &amp; Mitgliederdaten aktualisieren</h1>
+  <form action="send.php" method="post" accept-charset="UTF-8">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" autocomplete="name" required>
+
+    <label for="adresse">Adresse:</label>
+    <input type="text" id="adresse" name="adresse" autocomplete="street-address" required>
+
+    <label for="telefon">Telefonnummer:</label>
+    <input type="tel" id="telefon" name="telefon" autocomplete="tel" required>
+
+    <label for="email">E-Mail-Adresse:</label>
+    <input type="email" id="email" name="email" autocomplete="email" required>
+
+    <label for="kontakt">Bevorzugter Kontaktkanal:</label>
+    <select id="kontakt" name="kontakt">
+      <option value="Telefon">Telefon</option>
+      <option value="E-Mail">E-Mail</option>
+      <option value="Beides">Beides</option>
+    </select>
+
+    <div class="consent">
+      <input type="checkbox" id="notfall" name="notfall" value="Ja" required>
+      <label for="notfall">Ich stimme zu, dass meine Telefonnummer und E-Mail für dringende Notfall-Infos verwendet werden dürfen.</label>
+    </div>
+
+    <!-- Spam-Schutz: dieses Feld bleibt für Menschen unsichtbar und leer -->
+    <div class="hp" aria-hidden="true">
+      <label for="website">Website</label>
+      <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <button type="submit">Daten absenden</button>
+    <p class="note">Hinweis: Die Angaben werden ausschließlich zur Verwaltung der Wassergenossenschaft verwendet (DSGVO-konform).</p>
+  </form>
+</body>
+</html>
