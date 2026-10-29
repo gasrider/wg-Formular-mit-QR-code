@@ -22,6 +22,9 @@ https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/
 | `assets/qr_mitglieder.png` | QR-Code, Web-Auflösung (für PDF/Brief) |
 | `assets/qr_mitglieder_druck.png` | QR-Code, Druckqualität |
 | `assets/qr_mitglieder.svg` | QR-Code als Vektor (beliebig skalierbar) |
+| `dokumente/Wasserzaehlerstand_WG_Rabenschwand.pdf` | Brief an die Mitglieder (ausfüllbar, mit neuem QR-Code) |
+| `dokumente/Wasserzaehlerstand_WG_Rabenschwand_alt.pdf` | Ursprünglicher Brief (QR-Code zeigt noch auf bplaced) |
+| `tools/make_pdf.py` | Setzt den QR-Code ins Brief-PDF und macht das Rückgabedatum ausfüllbar |
 | `tools/make_qr.py` | Erzeugt die QR-Codes neu (z. B. für eine andere Adresse) |
 
 ## Einmalige Einrichtung
@@ -46,6 +49,13 @@ https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/
 
 QR-Code (`assets/qr_mitglieder.png`) mit der Handykamera scannen → das Formular
 muss erscheinen → absenden → „Vielen Dank!“ und die Mail kommt an.
+
+## Brief (PDF) anpassen
+
+`dokumente/Wasserzaehlerstand_WG_Rabenschwand.pdf` in Adobe Acrobat Reader öffnen.
+Ausfüllbar sind die drei Adresszeilen, das **Rückgabedatum** („… bis spätestens
+01.10.2025“ – einfach anklicken und überschreiben, Format TT.MM.JJJJ) und die
+Felder der Antwortkarte. Danach speichern bzw. drucken.
 
 ## Datenschutz
 
