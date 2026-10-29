@@ -8,7 +8,7 @@ import sys
 import qrcode
 import qrcode.image.svg
 
-URL = sys.argv[1] if len(sys.argv) > 1 else "http://wgrabenschwand.bplaced.net/mitglieder/index.html"
+URL = sys.argv[1] if len(sys.argv) > 1 else "https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/"
 
 
 def build():

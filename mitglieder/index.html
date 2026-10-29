@@ -20,7 +20,13 @@
 </head>
 <body>
   <h1>Kontakt- &amp; Mitgliederdaten aktualisieren</h1>
-  <form action="send.php" method="post" accept-charset="UTF-8">
+  <!-- Versand per FormSubmit (formsubmit.co) – funktioniert ohne PHP, z. B. auf GitHub Pages -->
+  <form action="https://formsubmit.co/wg-rabenschwand@gmx.at" method="post" accept-charset="UTF-8">
+    <input type="hidden" name="_subject" value="WG Rabenschwand – Aktualisierte Mitgliederdaten">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" id="next">
+
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" autocomplete="name" required>
 
@@ -47,12 +53,16 @@
 
     <!-- Spam-Schutz: dieses Feld bleibt für Menschen unsichtbar und leer -->
     <div class="hp" aria-hidden="true">
-      <label for="website">Website</label>
-      <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+      <label for="honey">Bitte leer lassen</label>
+      <input type="text" id="honey" name="_honey" tabindex="-1" autocomplete="off">
     </div>
 
     <button type="submit">Daten absenden</button>
     <p class="note">Hinweis: Die Angaben werden ausschließlich zur Verwaltung der Wassergenossenschaft verwendet (DSGVO-konform).</p>
   </form>
+  <script>
+    // Nach dem Absenden auf die eigene Danke-Seite weiterleiten
+    document.getElementById("next").value = new URL("danke.html", location.href).href;
+  </script>
 </body>
 </html>

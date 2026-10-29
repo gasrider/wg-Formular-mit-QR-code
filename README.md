@@ -3,54 +3,58 @@
 Mitglieder scannen den QR-Code, landen auf dem Online-Formular und die Daten
 werden per E-Mail an `wg-rabenschwand@gmx.at` geschickt.
 
+Das Formular wird kostenlos über **GitHub Pages** veröffentlicht (kein bplaced,
+kein PHP nötig). Den Mailversand übernimmt der kostenlose Dienst **FormSubmit**.
+
+**Adresse des Formulars / Ziel des QR-Codes:**
+https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/
+
 ## Dateien
 
 | Datei | Zweck |
 |---|---|
 | `mitglieder/index.html` | Das Formular |
-| `mitglieder/send.php` | Verschickt die Eingaben per E-Mail |
+| `mitglieder/danke.html` | Bestätigungsseite nach dem Absenden |
+| `index.html` | Leitet von der Startseite zum Formular weiter |
 | `assets/qr_mitglieder.png` | QR-Code, Web-Auflösung (für PDF/Brief) |
 | `assets/qr_mitglieder_druck.png` | QR-Code, Druckqualität |
 | `assets/qr_mitglieder.svg` | QR-Code als Vektor (beliebig skalierbar) |
 | `tools/make_qr.py` | Erzeugt die QR-Codes neu (z. B. für eine andere Adresse) |
 
-Der QR-Code zeigt auf: **http://wgrabenschwand.bplaced.net/mitglieder/index.html**
+## Einmalige Einrichtung
 
-## Warum der alte QR-Code „nicht funktioniert“ hat
+### 1. GitHub Pages einschalten
 
-Unter der Adresse oben liefert bplaced derzeit eine **„Fehler 404 – Seite nicht
-auffindbar“**-Seite (Stand 29.10.2026). Der QR-Code kann noch so korrekt sein –
-solange `mitglieder/index.html` nicht auf dem Server liegt, landet man auf einer
-Fehlerseite. Daher zuerst die Dateien hochladen (siehe unten) und im Browser
-prüfen, ob das Formular erscheint.
+1. https://github.com/gasrider/wg-Formular-mit-QR-code/settings/pages öffnen
+2. Bei **Source**: „Deploy from a branch“
+3. Bei **Branch**: `claude/gracious-hypatia-pa302w` und Ordner `/ (root)` wählen → **Save**
+4. 1–2 Minuten warten, dann die Formular-Adresse oben im Handy-Browser öffnen.
 
-## Hochladen (FileZilla)
+### 2. FormSubmit freischalten (nur beim allerersten Mal)
 
-1. Bei bplaced einloggen und prüfen, ob der Account `wgrabenschwand` noch aktiv ist
-   (inaktive Gratis-Accounts werden von bplaced gesperrt/gelöscht).
-2. Mit FileZilla verbinden und im Webroot (`/www/` bzw. `/`) anlegen:
-   - Ordner `mitglieder` → `index.html` und `send.php` hochladen
-   - Ordner `assets` → die QR-Dateien hochladen (optional)
-3. Rechte: Ordner `0755`, Dateien `0644`.
-4. Im Handy-Browser öffnen: http://wgrabenschwand.bplaced.net/mitglieder/index.html
-5. Testeintrag absenden und prüfen, ob die Mail ankommt (auch im Spam-Ordner).
+1. Das Formular einmal selbst mit Testdaten ausfüllen und absenden.
+2. FormSubmit schickt eine Mail an `wg-rabenschwand@gmx.at` (evtl. im Spam-Ordner)
+   → den Link **„Activate Form“** anklicken.
+3. Ab jetzt kommt jeder Eintrag als Mail mit einer übersichtlichen Tabelle an.
 
-## Falls keine E-Mail ankommt
+Tipp: In der Aktivierungsmail steht eine zufällige Zeichenfolge. Wenn man diese in
+`mitglieder/index.html` statt der E-Mail-Adresse in `action="https://formsubmit.co/…"`
+einträgt, ist die Mailadresse im Quelltext der Seite nicht mehr sichtbar.
 
-Manche Gratis-Pakete (z. B. bplaced „Freestyle“) erlauben den Mailversand per PHP
-nicht. Dann in `mitglieder/index.html` die Formularzeile ändern auf:
+### 3. Test mit dem Handy
 
-```html
-<form action="https://formsubmit.co/wg-rabenschwand@gmx.at" method="post">
-```
+QR-Code (`assets/qr_mitglieder.png`) mit der Handykamera scannen → das Formular
+muss erscheinen → absenden → „Vielen Dank!“ und die Mail kommt an.
 
-Beim ersten Absenden schickt FormSubmit eine Bestätigungsmail an
-`wg-rabenschwand@gmx.at` – einmal bestätigen, danach kommen alle Einträge per Mail.
-`send.php` wird dann nicht mehr benötigt.
+## Datenschutz
+
+Die Eingaben werden über FormSubmit (formsubmit.co) weitergeleitet. FormSubmit
+speichert laut eigenen Angaben keine Formulardaten dauerhaft, ist aber ein externer
+Dienst – das sollte im Datenschutzhinweis der Genossenschaft erwähnt werden.
 
 ## QR-Code für eine andere Adresse erzeugen
 
 ```bash
 pip install "qrcode[pil]"
-python3 tools/make_qr.py https://neue-adresse.example/mitglieder/index.html
+python3 tools/make_qr.py https://neue-adresse.example/mitglieder/
 ```
