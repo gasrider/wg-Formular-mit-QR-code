@@ -16,17 +16,19 @@
     .consent input{width:auto; margin-top:3px;}
     .consent label{font-weight:normal; margin-top:0;}
     .hp{position:absolute; left:-9999px;}
+    .fehler{margin-top:16px; padding:12px; border:1px solid #c62828; background:#fdecea; border-radius:4px;}
+    .mailbtn{display:block; text-align:center; padding:10px; background:#003366; color:#fff; text-decoration:none; margin-top:8px;}
   </style>
 </head>
 <body>
   <h1>Kontakt- &amp; Mitgliederdaten aktualisieren</h1>
-  <!-- Versand per FormSubmit (formsubmit.co) – funktioniert ohne PHP, z. B. auf GitHub Pages -->
-  <form action="https://formsubmit.co/wg-rabenschwand@gmx.at" method="post" accept-charset="UTF-8">
-    <input type="hidden" name="_subject" value="WG Rabenschwand – Aktualisierte Mitgliederdaten">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_next" id="next">
-
+  <!-- Versand per Web3Forms (web3forms.com) – funktioniert ohne PHP, z. B. auf GitHub Pages -->
+  <form id="formular" action="https://api.web3forms.com/submit" method="post" accept-charset="UTF-8">
+    <!-- Zugangsschlüssel von web3forms.com (wird per Mail an wg-rabenschwand@gmx.at geschickt) -->
+    <input type="hidden" name="access_key" value="HIER-ACCESS-KEY-EINTRAGEN">
+    <input type="hidden" name="subject" value="WG Rabenschwand – Aktualisierte Mitgliederdaten">
+    <input type="hidden" name="from_name" value="WG Rabenschwand Mitgliederformular">
+    <input type="hidden" name="redirect" id="redirect">
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" autocomplete="name" required>
 
@@ -53,16 +55,48 @@
 
     <!-- Spam-Schutz: dieses Feld bleibt für Menschen unsichtbar und leer -->
     <div class="hp" aria-hidden="true">
-      <label for="honey">Bitte leer lassen</label>
-      <input type="text" id="honey" name="_honey" tabindex="-1" autocomplete="off">
+      <label for="botcheck">Bitte nicht ankreuzen</label>
+      <input type="checkbox" id="botcheck" name="botcheck" tabindex="-1">
     </div>
 
-    <button type="submit">Daten absenden</button>
+    <button type="submit" id="senden">Daten absenden</button>
+    <div id="fehler" class="fehler" hidden>
+      <p><strong>Die Übermittlung hat leider nicht geklappt.</strong>
+        Bitte senden Sie Ihre Daten stattdessen per E-Mail – Ihr Mailprogramm öffnet sich mit allen Angaben bereits ausgefüllt:</p>
+      <a id="mailLink" class="mailbtn" href="mailto:wg-rabenschwand@gmx.at">Per E-Mail senden</a>
+    </div>
     <p class="note">Hinweis: Die Angaben werden ausschließlich zur Verwaltung der Wassergenossenschaft verwendet (DSGVO-konform).</p>
   </form>
   <script>
-    // Nach dem Absenden auf die eigene Danke-Seite weiterleiten
-    document.getElementById("next").value = new URL("danke.html", location.href).href;
+    var form = document.getElementById("formular");
+    var danke = new URL("danke.html", location.href).href;
+    document.getElementById("redirect").value = danke;
+
+    // Absenden im Hintergrund; schlägt das fehl, wird der Versand per E-Mail angeboten
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var button = document.getElementById("senden");
+      button.disabled = true;
+      button.textContent = "Wird gesendet …";
+
+      fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } })
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          if (!d.success) throw new Error(d.message);
+          location.href = danke;
+        })
+        .catch(function () {
+          var f = form.elements;
+          var text = "Name: " + f.name.value + "\nAdresse: " + f.adresse.value +
+            "\nTelefon: " + f.telefon.value + "\nE-Mail: " + f.email.value +
+            "\nKontaktweg: " + f.kontakt.value + "\nNotfall-Freigabe: " + (f.notfall.checked ? "Ja" : "Nein");
+          document.getElementById("mailLink").href = "mailto:wg-rabenschwand@gmx.at?subject=" +
+            encodeURIComponent("WG Rabenschwand – Aktualisierte Mitgliederdaten") + "&body=" + encodeURIComponent(text);
+          document.getElementById("fehler").hidden = false;
+          button.disabled = false;
+          button.textContent = "Erneut versuchen";
+        });
+    });
   </script>
 </body>
 </html>

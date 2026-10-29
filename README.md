@@ -4,7 +4,9 @@ Mitglieder scannen den QR-Code, landen auf dem Online-Formular und die Daten
 werden per E-Mail an `wg-rabenschwand@gmx.at` geschickt.
 
 Das Formular wird kostenlos über **GitHub Pages** veröffentlicht (kein bplaced,
-kein PHP nötig). Den Mailversand übernimmt der kostenlose Dienst **FormSubmit**.
+kein PHP nötig). Den Mailversand übernimmt der kostenlose Dienst **Web3Forms** (bis 250 Einträge/Monat).
+Fällt der Dienst einmal aus, bietet das Formular automatisch an, die Daten per
+E-Mail zu schicken (das Mailprogramm öffnet sich mit allen Angaben ausgefüllt).
 
 **Adresse des Formulars / Ziel des QR-Codes:**
 https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/
@@ -30,16 +32,14 @@ https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/
 3. Bei **Branch**: `claude/gracious-hypatia-pa302w` und Ordner `/ (root)` wählen → **Save**
 4. 1–2 Minuten warten, dann die Formular-Adresse oben im Handy-Browser öffnen.
 
-### 2. FormSubmit freischalten (nur beim allerersten Mal)
+### 2. Web3Forms-Zugangsschlüssel holen (nur einmal)
 
-1. Das Formular einmal selbst mit Testdaten ausfüllen und absenden.
-2. FormSubmit schickt eine Mail an `wg-rabenschwand@gmx.at` (evtl. im Spam-Ordner)
-   → den Link **„Activate Form“** anklicken.
-3. Ab jetzt kommt jeder Eintrag als Mail mit einer übersichtlichen Tabelle an.
-
-Tipp: In der Aktivierungsmail steht eine zufällige Zeichenfolge. Wenn man diese in
-`mitglieder/index.html` statt der E-Mail-Adresse in `action="https://formsubmit.co/…"`
-einträgt, ist die Mailadresse im Quelltext der Seite nicht mehr sichtbar.
+1. https://web3forms.com öffnen, `wg-rabenschwand@gmx.at` eintragen und auf
+   **„Create Access Key“** klicken.
+2. Der Schlüssel (z. B. `a1b2c3d4-...`) kommt per Mail an diese Adresse.
+3. In `mitglieder/index.html` den Text `HIER-ACCESS-KEY-EINTRAGEN` durch den
+   Schlüssel ersetzen. Der Schlüssel darf öffentlich sichtbar sein – er erlaubt
+   nur, Mails an `wg-rabenschwand@gmx.at` zu schicken.
 
 ### 3. Test mit dem Handy
 
@@ -48,9 +48,8 @@ muss erscheinen → absenden → „Vielen Dank!“ und die Mail kommt an.
 
 ## Datenschutz
 
-Die Eingaben werden über FormSubmit (formsubmit.co) weitergeleitet. FormSubmit
-speichert laut eigenen Angaben keine Formulardaten dauerhaft, ist aber ein externer
-Dienst – das sollte im Datenschutzhinweis der Genossenschaft erwähnt werden.
+Die Eingaben werden über Web3Forms (web3forms.com) per Mail weitergeleitet. Das ist
+ein externer Dienst – das sollte im Datenschutzhinweis der Genossenschaft erwähnt werden.
 
 ## QR-Code für eine andere Adresse erzeugen
 
