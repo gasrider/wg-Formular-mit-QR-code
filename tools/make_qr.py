@@ -1,32 +1,25 @@
-"""Erzeugt den QR-Code zum Mitglieder-Formular (PNG + SVG, ohne Logo).
+"""Erzeugt die QR-Codes zu den Formularen (PNG + SVG, ohne Logo).
 
-Aufruf:  python3 tools/make_qr.py [URL]
+Aufruf:  python3 tools/make_qr.py
 Benötigt: pip install "qrcode[pil]"
 """
-import sys
-
 import qrcode
 import qrcode.image.svg
 
-URL = sys.argv[1] if len(sys.argv) > 1 else "https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/"
+BASIS = "https://gasrider.github.io/wg-Formular-mit-QR-code/"
+FORMULARE = {"mitglieder": BASIS + "mitglieder/", "kontakt": BASIS + "kontakt/"}
 
 
-def build():
-    qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=10, border=4)
-    qr.add_data(URL)
+def build(url, box_size=10):
+    qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=box_size, border=4)
+    qr.add_data(url)
     qr.make(fit=True)
     return qr
 
 
-# Web-/PDF-Auflösung
-build().make_image(fill_color="black", back_color="white").save("assets/qr_mitglieder.png")
-
-# Druckqualität (ca. 3 cm bei 300 dpi und größer)
-qr = build()
-qr.box_size = 30
-qr.make_image(fill_color="black", back_color="white").save("assets/qr_mitglieder_druck.png")
-
-# Vektor (beliebig skalierbar, ideal für Word/PDF)
-build().make_image(image_factory=qrcode.image.svg.SvgPathFillImage).save("assets/qr_mitglieder.svg")
-
-print("QR-Code erzeugt für:", URL)
+for name, url in FORMULARE.items():
+    # Web-/PDF-Auflösung, Druckqualität und Vektor (beliebig skalierbar)
+    build(url).make_image(fill_color="black", back_color="white").save(f"assets/qr_{name}.png")
+    build(url, box_size=30).make_image(fill_color="black", back_color="white").save(f"assets/qr_{name}_druck.png")
+    build(url).make_image(image_factory=qrcode.image.svg.SvgPathFillImage).save(f"assets/qr_{name}.svg")
+    print("QR-Code erzeugt für:", url)

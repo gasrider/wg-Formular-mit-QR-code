@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <title>WG Rabenschwand – Mitgliederdaten &amp; Zählerstand</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Vorschau (Bild + Text) beim Teilen des Links in WhatsApp & Co. -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/">
+  <meta property="og:title" content="WG Rabenschwand – Zählerstand &amp; Kontaktdaten melden">
+  <meta property="og:description" content="Hier tippen, Formular ausfüllen, absenden – dauert ca. 1 Minute, keine Anmeldung nötig.">
+  <meta property="og:image" content="https://gasrider.github.io/wg-Formular-mit-QR-code/assets/og_mitglieder.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <style>
     body{font-family:Arial, sans-serif; max-width:640px; margin:0 auto; padding:24px; background:#fff;}
     h1{color:#003366; font-size:1.6rem;}
@@ -20,6 +28,7 @@
     .hilfe{font-size:.85rem; color:#555; margin-top:4px;}
     .fehler{margin-top:16px; padding:12px; border:1px solid #c62828; background:#fdecea; border-radius:4px;}
     .mailbtn{display:block; text-align:center; padding:10px; background:#003366; color:#fff; text-decoration:none; margin-top:8px;}
+    .mailbtn.wa{background:#1f8f4e;}
   </style>
 </head>
 <body>
@@ -42,8 +51,8 @@
     <label for="telefon">Telefonnummer:</label>
     <input type="tel" id="telefon" name="Telefonnummer" autocomplete="tel" required>
 
-    <label for="email">E-Mail-Adresse:</label>
-    <input type="email" id="email" name="email" autocomplete="email" required>
+    <label for="email">E-Mail-Adresse (falls vorhanden):</label>
+    <input type="email" id="email" name="email" autocomplete="email">
 
     <label for="kontakt">Bevorzugter Kontaktkanal:</label>
     <select id="kontakt" name="Bevorzugter Kontaktweg">
@@ -81,8 +90,9 @@
     <button type="submit" id="senden">Daten absenden</button>
     <div id="fehler" class="fehler" hidden>
       <p><strong>Die Übermittlung hat leider nicht geklappt.</strong>
-        Bitte senden Sie Ihre Daten stattdessen per E-Mail – Ihr Mailprogramm öffnet sich mit allen Angaben bereits ausgefüllt:</p>
+        Bitte senden Sie Ihre Daten stattdessen per E-Mail oder WhatsApp – die Nachricht ist mit allen Angaben bereits ausgefüllt:</p>
       <a id="mailLink" class="mailbtn" href="mailto:wg-rabenschwand@gmx.at">Per E-Mail senden</a>
+      <a id="waLink" class="mailbtn wa" href="https://wa.me/436643523598">Per WhatsApp senden</a>
     </div>
     <p class="note">Hinweis: Die Angaben werden ausschließlich zur Verwaltung der Wassergenossenschaft verwendet (DSGVO-konform).</p>
   </form>
@@ -105,7 +115,11 @@
       button.disabled = true;
       button.textContent = "Wird gesendet …";
 
-      fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } })
+      // Leeres E-Mail-Feld nicht mitschicken (Mitglieder ohne E-Mail-Adresse)
+      var daten = new FormData(form);
+      if (!daten.get("email")) daten.delete("email");
+
+      fetch(form.action, { method: "POST", body: daten, headers: { Accept: "application/json" } })
         .then(function (r) { return r.json(); })
         .then(function (d) {
           if (!d.success) throw new Error(d.message);
@@ -114,13 +128,16 @@
         .catch(function () {
           var wert = function (id) { return document.getElementById(id).value; };
           var text = "Name: " + wert("name") + "\nAdresse: " + wert("adresse") +
-            "\nTelefonnummer: " + wert("telefon") + "\nE-Mail: " + wert("email") +
+            "\nTelefonnummer: " + wert("telefon") + "\nE-Mail: " + (wert("email") || "keine") +
             "\nBevorzugter Kontaktweg: " + wert("kontakt") +
             "\nZählerstand (m³): " + wert("zaehlerstand") + "\nAblesedatum: " + wert("ablesedatumText") +
             "\nZählernummer: " + wert("zaehlernummer") +
             "\nNotfall-Freigabe: " + (document.getElementById("notfall").checked ? "Ja" : "Nein");
+          var betreff = "WG Rabenschwand – Mitgliederdaten & Zählerstand";
           document.getElementById("mailLink").href = "mailto:wg-rabenschwand@gmx.at?subject=" +
-            encodeURIComponent("WG Rabenschwand – Mitgliederdaten & Zählerstand") + "&body=" + encodeURIComponent(text);
+            encodeURIComponent(betreff) + "&body=" + encodeURIComponent(text);
+          document.getElementById("waLink").href = "https://wa.me/436643523598?text=" +
+            encodeURIComponent(betreff + "\n\n" + text);
           document.getElementById("fehler").hidden = false;
           button.disabled = false;
           button.textContent = "Erneut versuchen";

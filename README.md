@@ -9,8 +9,35 @@ kein PHP nötig). Den Mailversand übernimmt der kostenlose Dienst **Web3Forms**
 Fällt der Dienst einmal aus, bietet das Formular automatisch an, die Daten per
 E-Mail zu schicken (das Mailprogramm öffnet sich mit allen Angaben ausgefüllt).
 
-**Adresse des Formulars / Ziel des QR-Codes:**
-https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/
+**Zwei Formulare:**
+
+| Formular | Adresse | Inhalt |
+|---|---|---|
+| Zählerstand & Kontaktdaten | https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/ | Kontaktdaten + Wasserzählerstand (QR-Code im Brief) |
+| Nur Kontaktdaten | https://gasrider.github.io/wg-Formular-mit-QR-code/kontakt/ | Kontaktdaten ohne Zählerstand |
+
+Die E-Mail-Adresse ist freiwillig – Mitglieder ohne E-Mail senden nur mit Telefonnummer ab.
+
+## Per WhatsApp verschicken
+
+Einfach den **Link** (nicht nur ein Bild) in WhatsApp schicken. WhatsApp zeigt dann
+automatisch ein großes Vorschaubild mit QR-Code und „Hier tippen“ – ein Tipp darauf
+öffnet direkt das Formular. Vorlage zum Kopieren (Nur-Kontaktdaten-Formular):
+
+```
+Liebe Mitglieder der Wassergenossenschaft Rabenschwand,
+
+bitte helft uns, unsere Kontaktliste aktuell zu halten (wichtig für Notfälle, z. B. Wasserrohrbruch).
+Einfach auf den Link tippen, Formular ausfüllen und absenden – dauert ca. 1 Minute, keine Anmeldung nötig.
+Wer keine E-Mail-Adresse hat, lässt das Feld einfach leer.
+
+https://gasrider.github.io/wg-Formular-mit-QR-code/kontakt/
+
+Danke!
+Eure WG Rabenschwand
+```
+
+Für Zählerstände den Link `…/mitglieder/` verwenden.
 
 ## Dateien
 
@@ -18,15 +45,17 @@ https://gasrider.github.io/wg-Formular-mit-QR-code/mitglieder/
 |---|---|
 | `mitglieder/index.html` | Das Formular |
 | `mitglieder/danke.html` | Bestätigungsseite nach dem Absenden |
+| `kontakt/index.html`, `kontakt/danke.html` | Zweites Formular: nur Kontaktdaten |
 | `index.html` | Leitet von der Startseite zum Formular weiter |
-| `assets/qr_mitglieder.png` | QR-Code, Web-Auflösung (für PDF/Brief) |
-| `assets/qr_mitglieder_druck.png` | QR-Code, Druckqualität |
-| `assets/qr_mitglieder.svg` | QR-Code als Vektor (beliebig skalierbar) |
+| `assets/qr_<formular>.png` | QR-Code, Web-Auflösung (für PDF/Brief) |
+| `assets/qr_<formular>_druck.png` | QR-Code, Druckqualität |
+| `assets/qr_<formular>.svg` | QR-Code als Vektor (beliebig skalierbar) |
 | `dokumente/Wasserzaehlerstand_WG_Rabenschwand.pdf` | Brief an die Mitglieder (ausfüllbar, mit neuem QR-Code) |
 | `dokumente/Wasserzaehlerstand_WG_Rabenschwand_alt.pdf` | Ursprünglicher Brief (QR-Code zeigt noch auf bplaced) |
 | `tools/make_pdf.py` | Setzt den QR-Code ins Brief-PDF und macht das Rückgabedatum ausfüllbar |
-| `assets/qr_whatsapp.png` | Bild zum Teilen per WhatsApp (QR-Code, Überschrift und Link) |
-| `tools/make_share_image.py` | Erzeugt das WhatsApp-Bild neu |
+| `assets/qr_whatsapp_<formular>.png` | Hochformat-Bild zum Verschicken (QR-Code, Überschrift, Link) |
+| `assets/og_<formular>.png` | Vorschaubild, das WhatsApp beim Teilen des Links anzeigt |
+| `tools/make_share_image.py` | Erzeugt WhatsApp- und Vorschaubilder neu |
 | `tools/make_qr.py` | Erzeugt die QR-Codes neu (z. B. für eine andere Adresse) |
 
 ## Einmalige Einrichtung
@@ -68,5 +97,6 @@ ein externer Dienst – das sollte im Datenschutzhinweis der Genossenschaft erw�
 
 ```bash
 pip install "qrcode[pil]"
-python3 tools/make_qr.py https://neue-adresse.example/mitglieder/
+python3 tools/make_qr.py            # Adressen stehen oben im Skript
+python3 tools/make_share_image.py
 ```
