@@ -29,27 +29,29 @@
     <input type="hidden" name="subject" value="WG Rabenschwand – Aktualisierte Mitgliederdaten">
     <input type="hidden" name="from_name" value="WG Rabenschwand Mitgliederformular">
     <input type="hidden" name="redirect" id="redirect">
+    <!-- Erscheint als erste Zeile in der Mail an die WG (Feldname = Bezeichnung in der Mail) -->
+    <input type="hidden" name="Hinweis" value="Neue Mitgliederdaten über das Online-Formular – bitte in die Mitgliederliste übernehmen.">
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" autocomplete="name" required>
 
     <label for="adresse">Adresse:</label>
-    <input type="text" id="adresse" name="adresse" autocomplete="street-address" required>
+    <input type="text" id="adresse" name="Adresse" autocomplete="street-address" required>
 
     <label for="telefon">Telefonnummer:</label>
-    <input type="tel" id="telefon" name="telefon" autocomplete="tel" required>
+    <input type="tel" id="telefon" name="Telefonnummer" autocomplete="tel" required>
 
     <label for="email">E-Mail-Adresse:</label>
     <input type="email" id="email" name="email" autocomplete="email" required>
 
     <label for="kontakt">Bevorzugter Kontaktkanal:</label>
-    <select id="kontakt" name="kontakt">
+    <select id="kontakt" name="Bevorzugter Kontaktweg">
       <option value="Telefon">Telefon</option>
       <option value="E-Mail">E-Mail</option>
       <option value="Beides">Beides</option>
     </select>
 
     <div class="consent">
-      <input type="checkbox" id="notfall" name="notfall" value="Ja" required>
+      <input type="checkbox" id="notfall" name="Notfall-Freigabe" value="Ja" required>
       <label for="notfall">Ich stimme zu, dass meine Telefonnummer und E-Mail für dringende Notfall-Infos verwendet werden dürfen.</label>
     </div>
 
@@ -86,10 +88,11 @@
           location.href = danke;
         })
         .catch(function () {
-          var f = form.elements;
-          var text = "Name: " + f.name.value + "\nAdresse: " + f.adresse.value +
-            "\nTelefon: " + f.telefon.value + "\nE-Mail: " + f.email.value +
-            "\nKontaktweg: " + f.kontakt.value + "\nNotfall-Freigabe: " + (f.notfall.checked ? "Ja" : "Nein");
+          var wert = function (id) { return document.getElementById(id).value; };
+          var text = "Name: " + wert("name") + "\nAdresse: " + wert("adresse") +
+            "\nTelefonnummer: " + wert("telefon") + "\nE-Mail: " + wert("email") +
+            "\nBevorzugter Kontaktweg: " + wert("kontakt") +
+            "\nNotfall-Freigabe: " + (document.getElementById("notfall").checked ? "Ja" : "Nein");
           document.getElementById("mailLink").href = "mailto:wg-rabenschwand@gmx.at?subject=" +
             encodeURIComponent("WG Rabenschwand – Aktualisierte Mitgliederdaten") + "&body=" + encodeURIComponent(text);
           document.getElementById("fehler").hidden = false;
